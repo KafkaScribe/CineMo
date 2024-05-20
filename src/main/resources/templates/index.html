@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Watchlist</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f8f8;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+        text-align: center;
+    }
+    form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    input[type="text"] {
+        width: calc(100% - 150px);
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-right: 10px;
+    }
+    input[type="submit"] {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+    }
+    .watchlist {
+        list-style-type: none;
+        padding: 0;
+    }
+    .watchlist li {
+        border-bottom: 1px solid #ccc;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .watchlist li:last-child {
+        border-bottom: none;
+    }
+    .watchlist li .delete-btn,
+    .watchlist li .edit-btn {
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+    .watchlist li .edit-btn {
+        background-color: #28a745;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>My Watchlist</h1>
+    <form id="addMovieForm">
+        <input type="text" id="movieTitle" placeholder="Enter movie title" required>
+        <input type="submit" value="Add Movie">
+    </form>
+    <ul class="watchlist" id="watchlist">
+        <!-- Watchlist items will be added here dynamically -->
+    </ul>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const addMovieForm = document.getElementById("addMovieForm");
+        const movieTitleInput = document.getElementById("movieTitle");
+        const watchlist = document.getElementById("watchlist");
+        let editMode = false;
+        let editElement = null;
+
+        addMovieForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            const movieTitle = movieTitleInput.value.trim();
+            if (movieTitle !== "") {
+                if (editMode) {
+                    editElement.querySelector("span").textContent = movieTitle;
+                    editMode = false;
+                    editElement = null;
+                } else {
+                    // Create list item
+                    const listItem = document.createElement("li");
+                    listItem.innerHTML = `
+                        <span>${movieTitle}</span>
+                        <button class="edit-btn">Edit</button>
+                        <button class="delete-btn">Delete</button>
+                    `;
+                    watchlist.appendChild(listItem);
+                }
+                // Clear input
+                movieTitleInput.value = "";
+            }
+        });
+
+        // Edit or Delete movie
+        watchlist.addEventListener("click", function(event) {
+            if (event.target.classList.contains("delete-btn")) {
+                event.target.parentElement.remove();
+            } else if (event.target.classList.contains("edit-btn")) {
+                editElement = event.target.parentElement;
+                movieTitleInput.value = editElement.querySelector("span").textContent;
+                editMode = true;
+            }
+        });
+    });
+</script>
+</body>
+</html>
