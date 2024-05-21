@@ -1,2 +1,2 @@
 # CineMo
-A Page Save Your Favourite Movies
+A Page To Save Your Favourite Movies List.
